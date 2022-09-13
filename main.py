@@ -2,41 +2,8 @@ from fastapi import FastAPI, HTTPException, Request
 from slowapi.errors import RateLimitExceeded
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
-from db import inserir_voto_presidente
-
-
-presidentes = {
-    "13": {
-        "numero": "13",
-        "nome": "LULA",
-        "partido": "PT",
-    },
-    "22": {
-        "numero": "22",
-        "nome": "JAIR BOLSONARO",
-        "partido": "PL",
-    },
-    "12": {
-        "numero":"12",
-        "nome": "CIRO GOMES",
-        "partido": "PDT",
-    },
-    "15": {
-        "numero":"15",
-        "nome": "SIMONE TEBET",
-        "partido": "MDP",
-    },
-    "30": {
-        "numero":"30",
-        "nome": "LUIZ FELIPE d'Avila",
-        "partido": "NOVO",
-    },
-    "44": {
-        "numero":"44",
-        "nome": "SORAYA THRONICKE",
-        "partido": "UNIÃO",
-    },
-}
+from db import inserir_voto_presidente, resultado_votacao
+from presidentes import presidentes
 
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI()
@@ -65,3 +32,7 @@ def presidente(numero: str, request: Request):
         return {"message": "success"}
     else: 
         raise HTTPException(status_code=404, detail="Número invalido")
+
+@app.get('/resultado')
+def resultado():
+    return resultado_votacao()
