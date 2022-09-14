@@ -1,4 +1,4 @@
-presidentes = {
+export const presidentes = {
     "13": {
         "numero": "13",
         "nome": "LULA",
